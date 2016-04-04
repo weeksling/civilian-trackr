@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import argparse
 
 def track(cam):
 
@@ -47,7 +46,7 @@ def track(cam):
 
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
-      cv2.imshow('erosion/dilation', im_dl)
+      #cv2.imshow('erosion/dilation', im_dl)
     if(cv2.waitKey(27)!=-1):
       cam.release()
       cv2.destroyAllWindows()
@@ -55,20 +54,4 @@ def track(cam):
   cam.release()
   cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-  ap = argparse.ArgumentParser()
-  ap.add_argument("-v", "--video", help="path to the video file")
-  args = vars(ap.parse_args())
-
-  camera = None
-
-  # if the video argument is None, then we are reading from webcam
-  if args.get("video", None) is None:
-    camera = cv2.VideoCapture(0)
-   
-  # otherwise, we are reading from a video file
-  else:
-    camera = cv2.VideoCapture(args["video"])
-
-  track(camera)
 
