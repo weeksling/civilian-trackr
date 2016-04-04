@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+import display
+
 snapshots = 0
 
 def track(cam):
@@ -50,6 +52,8 @@ def track(cam):
 
       if len(blobs)>0:
         pedestrian_tracker.check_pedestrians(blobs, im_dl)
+        
+      display.overlay(img, contours)
 
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
