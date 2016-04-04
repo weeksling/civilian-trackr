@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import util
+
+import display
 
 snapshots = 0
 
@@ -47,7 +48,7 @@ def track(cam):
         except:
           print "Bad Rect"
 
-      util.overlay(img, contours)
+      display.overlay(img, contours)
 
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
