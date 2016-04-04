@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+snapshots = 0
+
 def track(cam):
 
   for_er = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7, 7))  
@@ -11,8 +13,8 @@ def track(cam):
 
   while(cam.isOpened): 
     f,img=cam.read()
-    
-    if f==True:
+    if f == True:
+      img_original = img.copy()
 
       cv2.accumulateWeighted(img, background, 0.01)
       im_zero = cv2.convertScaleAbs(background)
@@ -47,11 +49,29 @@ def track(cam):
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
       #cv2.imshow('erosion/dilation', im_dl)
-    if(cv2.waitKey(27)!=-1):
+    key_pressed = cv2.waitKey(27)
+    if (key_pressed==32):
+      capture(img_original, contours)
+    elif (key_pressed==27):
+      print key_pressed
       cam.release()
       cv2.destroyAllWindows()
       break 
   cam.release()
   cv2.destroyAllWindows()
+
+def capture (frame, contours):
+  global snapshots
+  for cnt in contours:
+    try:
+      x,y,w,h = cv2.boundingRect(cnt)
+      snapshots = snapshots + 1
+      crop_img = frame[y:y+h,x:x+w]
+      title = 'output/snapshot_' + `snapshots`+'.png'
+      cv2.imwrite(title,crop_img)
+    except:
+      print 'Capture failed!'
+      continue
+
 
 
