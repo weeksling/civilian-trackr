@@ -1,11 +1,21 @@
 import cv2
 
-def overlay(frame, contours):
-  # apply overlay to frame
-  overlay = frame.copy()
-  cv2.rectangle(overlay, (420,320),(650,370),(128,128,128), -1)
-  alpha = 0.8
-  cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
-  cv2.putText(frame, "Pedestrian Count (Total): {}".format("undefined"), (425, 335), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255,0,0), 1)
-  cv2.putText(frame, "Pedestrian Count (On Screen): {}".format(str(len(contours))), (425, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255,0,0), 1)
+class Overlay:
+  def __init__(self, frame):
+    self.frame = frame
+    self.total_count = 0
+    self.on_screen_count = 0
 
+  def increment_total_count(self):
+    self.total_count += 1
+
+  def increment_screen_count(self):
+    self.on_screen_count += 1
+
+  def display(self):
+    overlay = self.frame.copy()
+    cv2.rectangle(overlay, (420,320),(650,370),(128,128,128), -1)
+    alpha = 0.8
+    cv2.addWeighted(overlay, alpha, self.frame, 1 - alpha, 0, self.frame)
+    cv2.putText(self.frame, "Pedestrian Count (Total): {}".format(str(self.total_count)), (425, 335), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255,0,0), 1)
+    cv2.putText(self.frame, "Pedestrian Count (On Screen): {}".format(str(self.on_screen_count)), (425, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255,0,0), 1)
