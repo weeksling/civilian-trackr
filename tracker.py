@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 import display
+import pedestrians
 
 snapshots = 0
 
@@ -12,6 +13,8 @@ def track(cam):
 
   f, img = cam.read()
   background = np.float32(img)
+
+  pedestrian_tracker = pedestrians.PedestrianTracker()
 
   while(cam.isOpened): 
     f,img=cam.read()
@@ -33,7 +36,7 @@ def track(cam):
       im_er = cv2.erode(im_bw, for_er)
       im_dl = cv2.dilate(im_er, for_di)
 
-
+      cv2.imshow('dilated/eroded', im_dl)
       contours, hierarchy = cv2.findContours(im_dl, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
       blobs = []
@@ -51,8 +54,9 @@ def track(cam):
           print "Bad Rect"
 
       if len(blobs)>0:
-        pedestrian_tracker.check_pedestrians(blobs, im_dl)
-        
+        running_total = pedestrian_tracker.check_pedestrians(blobs, im_dl)
+        print running_total
+
       display.overlay(img, contours)
 
       cv2.imshow('thresholded frames',im_bw)
