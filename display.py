@@ -6,8 +6,8 @@ class Overlay:
     self.total_count = 0
     self.on_screen_count = 0
 
-  def increment_total_count(self):
-    self.total_count += 1
+  def set_total_count(self, total):
+    self.total_count = total
 
   def increment_screen_count(self):
     self.on_screen_count += 1

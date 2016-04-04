@@ -19,6 +19,7 @@ def track(cam):
   while(cam.isOpened): 
     f,img=cam.read()
     if f == True:
+      overlay = display.Overlay(img)
       img_original = img.copy()
 
       cv2.accumulateWeighted(img, background, 0.01)
@@ -50,15 +51,16 @@ def track(cam):
           x = int(moments['m10'] / moments['m00'])
           y = int(moments['m01'] / moments['m00'])
           blobs.append((x,y))
+          overlay.increment_screen_count()
         except:
           print "Bad Rect"
 
       if len(blobs)>0:
         running_total = pedestrian_tracker.check_pedestrians(blobs, im_dl)
+        overlay.set_total_count(running_total)
         print running_total
 
-      display.overlay(img, contours)
-
+      overlay.display()
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
       #cv2.imshow('erosion/dilation', im_dl)

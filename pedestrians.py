@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 pedestrian_id = 0
-VOTES_REQ = 3
+VOTES_REQ = 20
 PEDESTRIAN_LIFE = 3
 CANDIDATE_LIFE = 3
 DIST_LIMIT = 20
@@ -64,7 +64,6 @@ class PedestrianTracker:
 				ped.life = ped.life - 1
 				if ped.life<0:
 					ped.is_alive = False
-					print 'pedestrian killed'
 
 	def check_pedestrians (self, found_contours, current_frame):
 		if (self.setup_flag == False):
@@ -82,7 +81,6 @@ class PedestrianTracker:
 
 				# If no matching pedestrians were found, search for an existing candidate
 				if matched == False:
-					print 'searching for candidates'
 					for known in self.candidates:
 						if distance(found, known.get_location())<DIST_LIMIT:
 							matched = True
@@ -95,7 +93,6 @@ class PedestrianTracker:
 
 				# If a match still wasn't found, create a new candidate
 				if matched == False:
-					print 'making new candidate'
 					new_candidate = Candidate(found[0], found[1])
 					self.candidates.append(new_candidate)
 			self.prune()
