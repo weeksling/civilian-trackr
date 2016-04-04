@@ -34,7 +34,7 @@ def track(cam):
 
       contours, hierarchy = cv2.findContours(im_dl, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
-      my_blobs = []
+      blobs = []
       for cnt in contours:
         try:
           x,y,w,h = cv2.boundingRect(cnt)
@@ -43,8 +43,13 @@ def track(cam):
           
           moments = cv2.moments(cnt)
           x = int(moments['m10'] / moments['m00'])
+          y = int(moments['m01'] / moments['m00'])
+          blobs.append((x,y))
         except:
           print "Bad Rect"
+
+      if len(blobs)>0:
+        pedestrian_tracker.check_pedestrians(blobs, im_dl)
 
       cv2.imshow('thresholded frames',im_bw)
       cv2.imshow('video', img)
